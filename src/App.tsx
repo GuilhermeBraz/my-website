@@ -1,16 +1,15 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import './App.css'
-import SideBar from './components/SideBar'
+import Channelbar from './components/ChannelBar';
+import ContentContainer from './components/ContentContainer';
+import SideBar from './components/SideBar';
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
     <div className="flex">
-      <SideBar/>
+      <SideBar />
+      <Channelbar />
+      <ContentContainer />
     </div>
-  )
+  );
 }
 
-export default App
+export default App;

@@ -23,7 +23,11 @@ import {
   
   const ThemeIcon = () => {
     const [darkTheme, setDarkTheme] = useDarkMode();
-    const handleMode = () => setDarkTheme(!darkTheme);
+    const handleMode = () => {
+      console.log('clicked');
+      console.log(darkTheme);
+      setDarkTheme(!darkTheme);
+    };
     return (
       <span onClick={handleMode}>
         {darkTheme ? (

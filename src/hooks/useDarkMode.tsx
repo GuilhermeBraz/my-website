@@ -1,13 +1,8 @@
 import { useEffect, useState } from 'react';
 
-type ValueSetter<T> = (value: T | ((val: T) => T)) => void;
-type UseLocalStorageReturn<T> = [T, ValueSetter<T>];
-
-function useLocalStorage<T>(
-  key: string,
-  initialValue: T
-): UseLocalStorageReturn<T> {
-  const [storedValue, setStoredValue] = useState<T>(() => {
+  
+const useLocalStorage = (key:string, initialValue?:any) => {
+  const [storedValue, setStoredValue] = useState(() => {
     try {
       const item = window.localStorage.getItem(key);
       return item ? JSON.parse(item) : initialValue;
@@ -17,7 +12,7 @@ function useLocalStorage<T>(
     }
   });
 
-  const setValue: ValueSetter<T> = (value) => {
+  const setValue = (value:any) => {
     try {
       const valueToStore = value instanceof Function ? value(storedValue) : value;
 
@@ -28,28 +23,23 @@ function useLocalStorage<T>(
       console.log(error);
     }
   };
-
   return [storedValue, setValue];
-}
+};
 
-interface DarkMode {
-    enabled: boolean;
-    setEnabled: React.Dispatch<React.SetStateAction<boolean>>;
-  }
-  
-  const useDarkMode = (): [boolean, React.Dispatch<React.SetStateAction<boolean>>] => {
-    const [enabled, setEnabled] = useLocalStorage('dark-theme', false);
-    const isEnabled = typeof enabled === 'undefined' && enabled;
-  
-    useEffect(() => {
-      const className = 'dark';
-      const bodyClass = window.document.body.classList;
-  
-      isEnabled ? bodyClass.add(className) : bodyClass.remove(className);
-    }, [enabled, isEnabled]);
-  
-    return [enabled, setEnabled];
-  };
-  
+let enabledState: boolean | undefined;
+
+const useDarkMode = () => {
+  const [enabled, setEnabled] = useLocalStorage('dark-theme');
+  const isEnabled = typeof enabledState === 'undefined' && enabled;
+
+  useEffect(() => {
+    const className = 'dark';
+    const bodyClass = window.document.body.classList;
+
+    isEnabled ? bodyClass.add(className) : bodyClass.remove(className);
+  }, [enabled, isEnabled]);
+
+  return [enabled, setEnabled];
+};
 
 export default useDarkMode;
